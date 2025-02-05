@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无功补偿装置设计容量计算器</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function calculate() {
+            var m_S = parseFloat(document.getElementById("BYQ").value);
+            var eddy = parseFloat(document.getElementById("EDY").value);
+            var yxdy = parseFloat(document.getElementById("YDY").value);
+            var dk = parseFloat(document.getElementById("DKL").value);
+            var m_COS1 = parseFloat(document.getElementById("BCYS").value);
+            var m_COS2 = parseFloat(document.getElementById("GLYS").value);
+            
+            var BC = (m_S * 0.8) * ((Math.sqrt(1 - m_COS1 * m_COS1) / m_COS1) - (Math.sqrt(1 - m_COS2 * m_COS2) / m_COS2));
+            var PZ = BC * ((eddy * eddy) / (yxdy * yxdy)) * (1 - dk / 100);
+            var ED = Math.round(PZ / (1.732 * eddy) * 100) / 100;
+            var SJ = (Math.round(ED * (yxdy / (1 - dk / 100) / eddy) * 100)) / 100;
+
+            document.getElementById("BC").value = Math.round(BC);
+            document.getElementById("PZ").value = Math.round(PZ);
+            document.getElementById("SJ").value = SJ;
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f4f7fa;
+            padding-top: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3 class="text-center mb-4">无功补偿装置设计容量计算器</h3>
+		        <form>
+            <div class="mb-3">
+                <label for="BYQ" class="form-label">变压器容量 (kVA)</label>
+                <input type="number" class="form-control" id="BYQ" value="1600">
+            </div>
+            <div class="mb-3">
+                <label for="YDY" class="form-label">系统运行电压 (kV)</label>
+                <input type="number" class="form-control" id="YDY" value="0.4">
+            </div>
+            <div class="mb-3">
+                <label for="EDY" class="form-label">电容器额定电压 (kV)</label>
+                <input type="number" class="form-control" id="EDY" value="0.525">
+            </div>
+            <div class="mb-3">
+                <label for="DKL" class="form-label">串联电抗器电抗率 (%)</label>
+                <input type="number" class="form-control" id="DKL" value="12">
+            </div>
+            <div class="mb-3">
+                <label for="BCYS" class="form-label">补偿前功率因数 (Cosφ1)</label>
+                <input type="number" class="form-control" id="BCYS" value="0.79" step="0.01">
+            </div>
+            <div class="mb-3">
+                <label for="GLYS" class="form-label">补偿后功率因数 (Cosφ2)</label>
+                <input type="number" class="form-control" id="GLYS" value="0.92" step="0.01">
+            </div>
+            <div class="mb-3">
+			<label for="BC" class="form-label">系统实际补偿容量 (kVar)</label>
+                <input type="text" class="form-control" id="BC" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="PZ" class="form-label">设计需要配置补偿容量 (kVar)</label>
+                <input type="text" class="form-control" id="PZ" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="SJ" class="form-label">装置实际运行电流 (kA)</label>
+                <input type="text" class="form-control" id="SJ" readonly>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="calculate()">计算</button>
+			    <div class="footer">
+        &copy; 2025 WenJie.Tian.NaShunGroup.版权所有
+    </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
